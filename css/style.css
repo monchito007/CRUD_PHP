@@ -1,0 +1,11 @@
+        body { font-family: Arial, sans-serif; background: #c8edbcff; padding: 40px; }
+        h1 { text-align: center; }        
+        input[type="text"], input[type="email"] { width: 90%; padding: 10px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 5px; }
+        button { background: #007BFF; color: #fff; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        table { border: 3px solid #000000ff; width: 100%; border-collapse: collapse; background: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        th{ background-color: #9e9e9eff; }
+        td{ background-color: #d5d5d5ff; }
+        th, td { padding: 10px; text-align: left }
+        a { text-decoration: none; color: #007BFF; }
+        a:hover { text-decoration: underline; }
