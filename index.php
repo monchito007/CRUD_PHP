@@ -18,8 +18,9 @@
         // Create Mysql object 
         $obj_mysql = new Mysql(SERVER, DATABASE, USERNAME, PASSWORD);
         // Use select to build a proper SELECT query and display the table
+        $obj_mysql->select([], 'city')
         //$obj_mysql->select([], 'city', 'CountryCode = "ESP"', 'Population DESC', '10');
-        $obj_mysql->select(["ID","Name", "District", "Population"], 'city', 'CountryCode = "ESP"', 'Population DESC', '10');    
+        //$obj_mysql->select(["ID","Name", "District", "Population"], 'city', 'CountryCode = "ESP"', 'Population DESC', '10');    
         //$obj_mysql->select(["CountryCode", "Language", "IsOfficial", "Percentage"], 'countrylanguage', 'CountryCode = "ESP"', 'Percentage DESC', '');
     ?>
 </body>

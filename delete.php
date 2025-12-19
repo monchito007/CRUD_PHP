@@ -31,14 +31,14 @@ $obj_mysql->table = $tabla;
     // Mostrar los parámetros recibidos
     echo "<h3>Tabla: " . $obj_mysql->table . "</h3>";
     // Llamar al método para mostrar los campos de edición
-    $obj_mysql->select_fields($params,"edit");
+    $obj_mysql->select_fields($params,"delete");
 
+  
 
 
 ?>
 </body>
 </html>
-
 
 
 

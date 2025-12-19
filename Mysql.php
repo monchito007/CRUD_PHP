@@ -89,7 +89,7 @@ class Mysql{
     }
 
     // Obtiene los campos de un registro basándose en los parámetros recibidos
-    public function select_edit_fields($params) {
+    public function select_fields($params, $action){
         
         $table = ""; // Inicializar la variable de tabla
 
@@ -116,12 +116,16 @@ class Mysql{
         // Construir la consulta completa
         $query = $query . $table . " " . $where;
         // Ejecutar la consulta y mostrar la tabla de edición
-        $this->get_edit_table($query);
-
+        if($action == "edit"){
+            $this->get_edit_table($query);
+        }else if($action == "delete"){
+            $this->get_delete_table($query);
+        }
         return;
 
     }
 
+    // Actualiza un registro basándose en los parámetros recibidos
     public function update($params){
 
         $table = isset($params['table']) ? $params['table'] : '';
@@ -157,9 +161,40 @@ class Mysql{
 
         return;
 
-    }   
+    }
+    
+    // Elimina un registro basándose en los parámetros recibidos
+    public function delete($params){
 
+        $table = isset($params['table']) ? $params['table'] : '';
 
+        // Construir la consulta DELETE
+        $query = "DELETE FROM " . $table . " WHERE ";
+
+        $where_clauses = [];
+
+        foreach ($params as $key => $value) {
+            if ($key === 'table') {
+                continue; // Saltar el parámetro 'table'
+            }
+            $where_clauses[] = $key . " = '" . $value . "'";
+        }
+
+        $query .= implode(" AND ", $where_clauses);
+
+        echo "<br><br>Executing delete query: " . $query . "<br><br>";
+
+        // Ejecutar la consulta DELETE
+        mysqli_query($this->conn, $query);
+
+        // Redirigir de vuelta a la página principal
+        header("Location: index.php");
+
+        return;
+
+    }
+
+    //Genera una tabla HTML de edición a partir de una consulta
     public function get_edit_table($query){
 
         //Ejecutamos la Consulta
@@ -204,6 +239,54 @@ class Mysql{
         mysqli_close($this->conn);
 
     }
+
+    //Genera una tabla HTML de edición a partir de una consulta
+    public function get_delete_table($query){
+
+        //Ejecutamos la Consulta
+        $this->get_res_query($query);
+
+        //Obtenemos el número de columnas
+        $field_count = mysqli_num_fields($this->res);
+
+        //Obtenemos los nombres de las columnas
+        $col_names = $this->get_col_names();
+
+        //Mostramos la tabla
+        echo "<form method='post' action='delete_register.php'>";
+        echo "<table border='1'>";
+        echo "<tr>";
+        
+        //Imprimimos los nombres de las columnas
+        for($x=0; $x<count($col_names);$x++){
+            echo "<th>" . $col_names[$x]->name . "</th>";
+        }
+        //Campo oculto con el nombre de la tabla
+        echo "<input type='hidden' name='table' value='" . htmlspecialchars($this->table) . "'>";
+        echo "</tr>";
+
+        //Imprimimos los datos de la tabla
+        while ($row = mysqli_fetch_array($this->res)) {
+            echo "<tr>";
+            for($x=0; $x<$field_count;$x++){
+                echo "<td><input type='hidden' name='" . $col_names[$x]->name . "' value='" . $row[$x] . "'>".$row[$x]."</td>";
+            }
+            echo "</tr>";
+        }
+
+        echo "</table>";
+        echo "<br><button type='submit'>Eliminar Registro</button>";
+        echo "</form>";
+
+        // Liberamos el resultado
+        mysqli_free_result($this->res);
+
+        // Cerramos la conexión
+        mysqli_close($this->conn);
+
+    }
+
+
 
     //Genera una tabla HTML a partir de una consulta
     public function get_table($query){
